@@ -1,5 +1,5 @@
 # CSE-api
-C# classes for sending async requests to crypto stock exchanges api: Binance, Gate, Huobi, Kucoin
+C# classes for sending async requests to crypto stock exchanges api: Binance, Gate, Huobi, Kucoin, Hitbtc
 
 Classes provides basic and simple way to get any data from api. 
 1. Generate string with this structure: "method endpoint parameters" or "method endpoint".
@@ -17,6 +17,7 @@ https://kucoinapidocs.docs.apiary.io
 
 https://gate.io/api2
 
+https://api.hitbtc.com/
 
 
 #### Files:
@@ -30,6 +31,8 @@ apiLib/API/gate.cs
 apiLib/API/huobi.cs 
 
 apiLib/API/kucoin.cs 
+
+apiLib/API/hitbtc.cs 
 
   - Stock exchanges child classes. Contains specific encryption function and pre-request parameters-string manipulations. 
 

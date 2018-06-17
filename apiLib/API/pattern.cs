@@ -60,6 +60,8 @@ namespace API.sample
             try
             {
                 string[] tmp = requestString.Trim(new char[] { '\t', ' ' }).Split(' ');
+                for (int i = 3; i < tmp.Count(); i++)
+                    tmp[2] += (i < tmp.Count() - 1) ? tmp[i] + " " : tmp[i];
                 return sendRequest(tmp[0], tmp[1], (tmp.Count() >= 3) ? tmp[2] : String.Empty);
             }
             catch (Exception) { throw new Exception("Incorrect request string"); }

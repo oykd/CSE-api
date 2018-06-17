@@ -11,6 +11,8 @@ using API.binance;
 using API.gate;
 using API.huobi;
 
+using API.hitbtc;
+
 namespace example
 {
 
@@ -269,6 +271,10 @@ namespace example
                 Console.WriteLine("kucoin GET /v1/account/USDT/balance");
                 Console.WriteLine("kucoin POST /v1/order?symbol=ETH-USDT amount=1&price=1&type=BUY");
 
+                Console.WriteLine("hitbtc GET /api/2/public/orderbook/BTCUSD?limit=5");
+                Console.WriteLine("hitbtc AUTH-GET /api/2/trading/balance");
+                Console.WriteLine("hitbtc AUTH-POST /api/2/order {\"symbol\":\"ethbtc\",\"side\":\"sell\",\"quantity\":0.063,\"price\":0.046016}");
+
                 Console.WriteLine("");
                 Console.WriteLine("Enter empty string for exit");
                 #endregion
@@ -332,6 +338,13 @@ namespace example
                                 kucoin.OnResponseReceived += Api_OnResponseReceived;
                                 kucoin.nonceAmendment = noncAm;
                                 kucoin.sendReq(content);
+                            }
+                            break;
+                        case "hitbtc":
+                            using (var hitbtc = new Hitbtc(key, secret))
+                            {
+                                hitbtc.OnResponseReceived += Api_OnResponseReceived;
+                                hitbtc.sendReq(content);
                             }
                             break;
                         default:

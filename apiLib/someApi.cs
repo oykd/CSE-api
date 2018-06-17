@@ -155,7 +155,7 @@ namespace someApiSpace
 
         #region Requests
         // Various requests
-        // * Some of them are unnecessary (just examples of different ways to do a same job). 
+        // * Some of them are unnecessary and duplicates each other (just examples of different ways to do a same job). 
 
         /// <summary>
         /// Simple request (HttpWebRequest based)
@@ -364,6 +364,49 @@ namespace someApiSpace
                     responseData = await reader.ReadToEndAsync();
                     waitingResponse = false;
                     OnResponseReceived(responseData);
+                }
+            }
+            catch (TaskCanceledException tcex)
+            {
+                responseData = "!Timeout exception: " + tcex.Message;
+                waitingResponse = false;
+                OnResponseTimeout(responseData);
+            }
+            catch (Exception ex)
+            {
+                responseData = "!System exception: " + ex.Message;
+                waitingResponse = false;
+            }
+        }
+
+        public async void sendAuthRequest(string method, string endpoint, string data, string login, string pass)
+        {
+            try
+            {
+                if (waitingResponse) return; //previous request not ended
+                waitingResponse = true;
+                responseData = "";
+                using (var httpClient = new HttpClient { BaseAddress = new Uri(apiUrl), Timeout = TimeSpan.FromSeconds(timeout) })
+                {
+                    HttpMethod reqMethod = HttpMethod.Post;
+                    switch (method)
+                    {
+                        case "POST":    reqMethod = HttpMethod.Post;    break;
+                        case "GET":     reqMethod = HttpMethod.Get;     break;
+                        case "PUT":     reqMethod = HttpMethod.Put;     break;
+                        case "DELETE":  reqMethod = HttpMethod.Delete;  break;
+                    }
+                    var request = new HttpRequestMessage(reqMethod, endpoint);
+                    var byteArray = new UTF8Encoding().GetBytes($"{login}:{pass}");
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                    if (data != String.Empty)
+                        request.Content = new StringContent(data, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.SendAsync(request))
+                    {
+                        responseData = await response.Content.ReadAsStringAsync();
+                        waitingResponse = false;
+                        OnResponseReceived(responseData);
+                    }
                 }
             }
             catch (TaskCanceledException tcex)

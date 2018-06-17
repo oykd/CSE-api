@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="API\binance.cs" />
     <Compile Include="API\gate.cs" />
+    <Compile Include="API\hitbtc.cs" />
     <Compile Include="API\huobi.cs" />
     <Compile Include="API\kucoin.cs" />
     <Compile Include="API\pattern.cs" />
